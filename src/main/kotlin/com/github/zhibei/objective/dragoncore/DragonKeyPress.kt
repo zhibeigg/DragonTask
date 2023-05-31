@@ -9,6 +9,7 @@ object DragonKeyPress : ObjectiveCountableI<KeyPressEvent>() {
 
     override val name = "dragoncore keypress"
     override val event = KeyPressEvent::class.java
+
     override val isAsync = true
 
     init {

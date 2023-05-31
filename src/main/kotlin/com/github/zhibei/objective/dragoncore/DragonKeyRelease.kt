@@ -9,6 +9,7 @@ object DragonKeyRelease : ObjectiveCountableI<KeyReleaseEvent>() {
 
     override val name = "dragoncore keyrelease"
     override val event = KeyReleaseEvent::class.java
+
     override val isAsync = true
 
     init {

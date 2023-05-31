@@ -1,9 +1,15 @@
 package com.github.zhibei
 
+import com.github.zhibei.objective.dragoncore.CustomPacket
 import com.github.zhibei.objective.dragoncore.DragonKeyPress
 import com.github.zhibei.objective.dragoncore.DragonKeyRelease
+import com.github.zhibei.objective.dragoncore.potion.PotionsHookUp
+import com.github.zhibei.objective.dragoncore.potion.UsePotion
+import com.github.zhibei.objective.planners.*
+import eos.moe.dragoncore.api.CoreAPI
 import eos.moe.dragoncore.api.event.KeyPressEvent
 import ink.ptms.chemdah.api.ChemdahAPI
+import ink.ptms.chemdah.api.event.collect.PluginReloadEvent
 import ink.ptms.chemdah.core.quest.QuestLoader.register
 import ink.ptms.chemdah.core.quest.objective.ObjectiveCountableI
 import org.bukkit.Bukkit
@@ -22,8 +28,20 @@ object DragonTask : Plugin() {
     override fun onEnable() {
         say("&6==================")
         say("&6DragonTask!&a启动！&cby.zhi_bei")
+        //dragonCore
         reg(DragonKeyPress)
         reg(DragonKeyRelease)
+        reg(CustomPacket)
+        //dragonPotion
+        reg(PotionsHookUp)
+        reg(UsePotion)
+        //planners
+        reg(PlayerSelectedJob)
+        reg(PlayerCastSkill)
+        reg(PlayerSkillUpgrade)
+        reg(PlayerSkillBind)
+        reg(PlayerTransfer)
+        //重载
         ChemdahAPI.reloadAll()
         say("&6DragonTask!&a启动成功！&cby.zhi_bei")
         say("&6==================")
@@ -57,6 +75,24 @@ object DragonTask : Plugin() {
     @SubscribeEvent
     fun e(e: KeyPressEvent) {
         debug(e.key)
+    }
+
+    @SubscribeEvent
+    fun e(e: PluginReloadEvent.Quest) {
+        val keys = mutableSetOf<String>()
+        ChemdahAPI.questTemplate.forEach {
+            it.value.taskMap.forEach { task ->
+                if (task.value.objective.name == "dragoncore keypress" || task.value.objective.name == "dragoncore keyrelease" ) {
+                    keys.add(task.value.condition["key"].toString())
+                }
+            }
+        }
+        keys.forEach {
+            if (it != "null") {
+                CoreAPI.registerKey(it)
+                say("&a龙核按键&e$it&a注册成功")
+            }
+        }
     }
 
 }

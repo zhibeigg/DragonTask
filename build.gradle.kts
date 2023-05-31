@@ -2,7 +2,7 @@ plugins {
     `java-library`
     `maven-publish`
     id("io.izzel.taboolib") version "1.56"
-    id("org.jetbrains.kotlin.jvm") version "1.5.10"
+    id("org.jetbrains.kotlin.jvm") version "1.7.10"
 }
 
 taboolib {
@@ -20,6 +20,8 @@ taboolib {
         }
         dependencies {
             name("DragonCore").optional(true)
+            name("DragonPotions").optional(true)
+            name("Planners").optional(true)
             name("Chemdah")
         }
     }
