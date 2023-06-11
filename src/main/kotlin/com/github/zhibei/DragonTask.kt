@@ -1,10 +1,8 @@
 package com.github.zhibei
 
-import com.github.zhibei.objective.dragoncore.CustomPacket
+import com.github.zhibei.objective.dragoncore.DragonCustomPacket
 import com.github.zhibei.objective.dragoncore.DragonKeyPress
 import com.github.zhibei.objective.dragoncore.DragonKeyRelease
-import com.github.zhibei.objective.dragoncore.potion.PotionsHookUp
-import com.github.zhibei.objective.dragoncore.potion.UsePotion
 import com.github.zhibei.objective.planners.*
 import eos.moe.dragoncore.api.CoreAPI
 import eos.moe.dragoncore.api.event.KeyPressEvent
@@ -28,21 +26,7 @@ object DragonTask : Plugin() {
     override fun onEnable() {
         say("&6==================")
         say("&6DragonTask!&a启动！&cby.zhi_bei")
-        //dragonCore
-        reg(DragonKeyPress)
-        reg(DragonKeyRelease)
-        reg(CustomPacket)
-        //dragonPotion
-        reg(PotionsHookUp)
-        reg(UsePotion)
-        //planners
-        reg(PlayerSelectedJob)
-        reg(PlayerCastSkill)
-        reg(PlayerSkillUpgrade)
-        reg(PlayerSkillBind)
-        reg(PlayerTransfer)
-        //重载
-        ChemdahAPI.reloadAll()
+        reg()
         say("&6DragonTask!&a启动成功！&cby.zhi_bei")
         say("&6==================")
     }
@@ -51,6 +35,24 @@ object DragonTask : Plugin() {
         say("&6==================")
         say("&6DragonTask!&a卸载成功！&cby.zhi_bei")
         say("&6==================")
+    }
+
+    fun reg() {
+        //dragonCore
+        reg(DragonKeyPress)
+        reg(DragonKeyRelease)
+        reg(DragonCustomPacket)
+        //dragonPotion
+        //reg(PotionsHookUp)
+        //reg(UsePotion)
+        //planners
+        reg(PlayerSelectedJob)
+        reg(PlayerCastSkill)
+        reg(PlayerSkillUpgrade)
+        reg(PlayerSkillBind)
+        reg(PlayerTransfer)
+        //重载
+        ChemdahAPI.reloadAll()
     }
 
     fun reg(cs : ObjectiveCountableI<*>) {
