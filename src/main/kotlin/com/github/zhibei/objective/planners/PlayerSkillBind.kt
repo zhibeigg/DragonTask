@@ -1,5 +1,6 @@
 package com.github.zhibei.objective.planners
 
+import com.bh.planners.api.PlannersAPI.plannersProfile
 import com.bh.planners.api.event.PlayerSkillBindEvent
 import ink.ptms.chemdah.core.quest.objective.Dependency
 import ink.ptms.chemdah.core.quest.objective.ObjectiveCountableI

@@ -9,7 +9,7 @@ import taboolib.common.platform.command.mainCommand
 import taboolib.common.platform.command.subCommand
 import taboolib.expansion.createHelper
 
-@CommandHeader(name = "dragontask", aliases = ["dt"], permission = "dragontask.commmand")
+@CommandHeader(name = "dragontask", aliases = ["task"], permission = "dragontask.commmand")
 object Command {
 
     @CommandBody
@@ -20,7 +20,7 @@ object Command {
     @CommandBody
     val reload = subCommand {
 
-        execute<ProxyCommandSender> { sender, context, argument ->
+        execute<ProxyCommandSender> { sender, _, _ ->
             config.reload()
             sender.sendMessage("reload successful.")
         }
@@ -30,10 +30,13 @@ object Command {
     @CommandBody
     val reg = subCommand {
 
-        execute<ProxyCommandSender> { sender, context, argument ->
+        execute<ProxyCommandSender> { _, _, _ ->
             DragonTask.reg()
         }
 
     }
+
+    @CommandBody
+    val mm = CommandMM
 
 }
