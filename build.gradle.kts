@@ -21,7 +21,6 @@ taboolib {
         dependencies {
             name("DragonCore").optional(true)
             name("DragonPotions").optional(true)
-            name("Planners").optional(true)
             name("MythicMobs").optional(true)
             name("Chemdah")
         }
