@@ -3,6 +3,8 @@ package com.github.zhibei
 import com.github.zhibei.objective.dragoncore.DragonCustomPacket
 import com.github.zhibei.objective.dragoncore.DragonKeyPress
 import com.github.zhibei.objective.dragoncore.DragonKeyRelease
+import com.github.zhibei.objective.dragoncore.DragonPlayerSlotUpdate
+import com.github.zhibei.objective.dragoncore.potion.UsePotion
 import eos.moe.dragoncore.api.CoreAPI
 import eos.moe.dragoncore.api.event.KeyPressEvent
 import ink.ptms.chemdah.api.ChemdahAPI
@@ -41,9 +43,8 @@ object DragonTask : Plugin() {
         reg(DragonKeyPress)
         reg(DragonKeyRelease)
         reg(DragonCustomPacket)
-        //dragonPotion
-        //reg(PotionsHookUp)
-        //reg(UsePotion)
+        reg(DragonPlayerSlotUpdate)
+        reg(UsePotion)
         //重载
         ChemdahAPI.reloadAll()
     }

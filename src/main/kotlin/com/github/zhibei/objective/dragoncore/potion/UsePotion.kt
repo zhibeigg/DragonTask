@@ -17,7 +17,7 @@ object UsePotion : ObjectiveCountableI<UsePotionEvent>() {
             it.player
         }
         addSimpleCondition("name") { data, it ->
-            data.toString() == it.potionName
+            it.potionName.contains(data.toString())
         }
         addSimpleCondition("type") { data, it ->
             data.toString() == it.potionType
