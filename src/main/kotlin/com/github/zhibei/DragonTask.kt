@@ -1,18 +1,17 @@
 package com.github.zhibei
 
-import com.github.zhibei.objective.dragoncore.DragonCustomPacket
-import com.github.zhibei.objective.dragoncore.DragonKeyPress
-import com.github.zhibei.objective.dragoncore.DragonKeyRelease
-import com.github.zhibei.objective.dragoncore.DragonPlayerSlotUpdate
-import com.github.zhibei.objective.dragoncore.potion.UsePotion
+import com.github.zhibei.objective.dragoncore.Loader
 import eos.moe.dragoncore.api.CoreAPI
 import eos.moe.dragoncore.api.event.KeyPressEvent
 import ink.ptms.chemdah.api.ChemdahAPI
 import ink.ptms.chemdah.api.event.collect.PluginReloadEvent
 import ink.ptms.chemdah.core.quest.QuestLoader.register
+import ink.ptms.chemdah.core.quest.objective.Objective
 import ink.ptms.chemdah.core.quest.objective.ObjectiveCountableI
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
+import taboolib.common.io.getInstance
+import taboolib.common.io.runningClasses
 import taboolib.common.platform.Plugin
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.warning
@@ -39,12 +38,15 @@ object DragonTask : Plugin() {
     }
 
     fun reg() {
-        //dragonCore
-        reg(DragonKeyPress)
-        reg(DragonKeyRelease)
-        reg(DragonCustomPacket)
-        reg(DragonPlayerSlotUpdate)
-        reg(UsePotion)
+        val list = ChemdahAPI.questObjective.map { it.value }
+        runningClasses.forEach {
+            if (Objective::class.java.isAssignableFrom(it) && it.isAnnotationPresent(Loader::class.java)) {
+                val objective = it.getInstance()?.get() as ObjectiveCountableI<*>
+                if (!list.contains(objective)) {
+                    reg(objective)
+                }
+            }
+        }
         //重载
         ChemdahAPI.reloadAll()
     }

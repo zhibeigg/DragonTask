@@ -4,6 +4,7 @@ import eos.moe.dragoncore.api.event.KeyReleaseEvent
 import ink.ptms.chemdah.core.quest.objective.Dependency
 import ink.ptms.chemdah.core.quest.objective.ObjectiveCountableI
 
+@Loader
 @Dependency("DragonCore")
 object DragonKeyRelease : ObjectiveCountableI<KeyReleaseEvent>() {
 

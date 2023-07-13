@@ -4,6 +4,7 @@ import eos.moe.dragoncore.api.gui.event.CustomPacketEvent
 import ink.ptms.chemdah.core.quest.objective.Dependency
 import ink.ptms.chemdah.core.quest.objective.ObjectiveCountableI
 
+@Loader
 @Dependency("DragonCore")
 object DragonCustomPacket : ObjectiveCountableI<CustomPacketEvent>() {
 

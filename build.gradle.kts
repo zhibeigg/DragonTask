@@ -1,8 +1,8 @@
 plugins {
     `java-library`
     `maven-publish`
-    id("io.izzel.taboolib") version "1.56"
-    id("org.jetbrains.kotlin.jvm") version "1.5.10"
+    id("io.izzel.taboolib") version "1.50"
+    id("org.jetbrains.kotlin.jvm") version "1.8.10"
 }
 
 taboolib {
@@ -12,7 +12,7 @@ taboolib {
     install("expansion-command-helper")
     install("module-configuration")
     classifier = null
-    version = "6.0.10-113"
+    version = "6.0.11-19"
 
     description {
         contributors {
@@ -22,6 +22,7 @@ taboolib {
             name("DragonCore").optional(true)
             name("DragonPotions").optional(true)
             name("MythicMobs").optional(true)
+            name("DragonCollect").optional(true)
             name("Chemdah")
         }
     }

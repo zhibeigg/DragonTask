@@ -1,9 +1,11 @@
 package com.github.zhibei.objective.dragoncore.potion
 
+import com.github.zhibei.objective.dragoncore.Loader
 import com.ipedg.minecraft.dragonpotions.event.UsePotionEvent
 import ink.ptms.chemdah.core.quest.objective.Dependency
 import ink.ptms.chemdah.core.quest.objective.ObjectiveCountableI
 
+@Loader
 @Dependency("DragonPotions")
 object UsePotion : ObjectiveCountableI<UsePotionEvent>() {
 

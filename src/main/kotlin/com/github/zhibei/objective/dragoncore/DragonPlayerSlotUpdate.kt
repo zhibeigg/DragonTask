@@ -4,6 +4,7 @@ import eos.moe.dragoncore.api.event.PlayerSlotUpdateEvent
 import ink.ptms.chemdah.core.quest.objective.Dependency
 import ink.ptms.chemdah.core.quest.objective.ObjectiveCountableI
 
+@Loader
 @Dependency("DragonCore")
 object DragonPlayerSlotUpdate : ObjectiveCountableI<PlayerSlotUpdateEvent>() {
 
@@ -17,7 +18,7 @@ object DragonPlayerSlotUpdate : ObjectiveCountableI<PlayerSlotUpdateEvent>() {
             it.player
         }
         addSimpleCondition("identifier") { data, it ->
-            it.identifier == data.toString()
+            it.identifier.contains(data.toString())
         }
         addSimpleCondition("name") { data, it ->
             it.itemStack.itemMeta?.displayName == data.toString()
