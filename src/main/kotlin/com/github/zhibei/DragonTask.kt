@@ -11,7 +11,7 @@ import ink.ptms.chemdah.core.quest.objective.ObjectiveCountableI
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import taboolib.common.io.getInstance
-import taboolib.common.io.runningClasses
+import taboolib.common.io.runningClassesWithoutLibrary
 import taboolib.common.platform.Plugin
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.warning
@@ -39,17 +39,19 @@ object DragonTask : Plugin() {
 
     fun reg() {
         val list = ChemdahAPI.questObjective.map { it.value }
-        runningClasses.forEach {
+        runningClassesWithoutLibrary.forEach {
             if (Objective::class.java.isAssignableFrom(it) && it.isAnnotationPresent(Loader::class.java)) {
-                val objective = it.getInstance()?.get() as ObjectiveCountableI<*>
-                if (!list.contains(objective)) {
-                    if (it.isAnnotationPresent(com.github.zhibei.objective.Plugin::class.java)) {
-                        if (Bukkit.getPluginManager().isPluginEnabled(it.getAnnotation(com.github.zhibei.objective.Plugin::class.java).plugin)) {
+                if (it.isAnnotationPresent(com.github.zhibei.objective.Plugin::class.java)) {
+                    if (Bukkit.getPluginManager()
+                            .isPluginEnabled(it.getAnnotation(com.github.zhibei.objective.Plugin::class.java).plugin)
+                    ) {
+                        val objective = it.getInstance()?.get() as ObjectiveCountableI<*>
+                        if (!list.contains(objective)) {
                             reg(objective)
                         }
-                    } else {
-                        reg(objective)
                     }
+                } else {
+                    reg(it.getInstance()?.get() as ObjectiveCountableI<*>)
                 }
             }
         }
