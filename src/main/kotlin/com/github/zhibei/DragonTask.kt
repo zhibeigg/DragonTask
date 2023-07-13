@@ -1,6 +1,6 @@
 package com.github.zhibei
 
-import com.github.zhibei.objective.dragoncore.Loader
+import com.github.zhibei.objective.Loader
 import eos.moe.dragoncore.api.CoreAPI
 import eos.moe.dragoncore.api.event.KeyPressEvent
 import ink.ptms.chemdah.api.ChemdahAPI
@@ -43,7 +43,13 @@ object DragonTask : Plugin() {
             if (Objective::class.java.isAssignableFrom(it) && it.isAnnotationPresent(Loader::class.java)) {
                 val objective = it.getInstance()?.get() as ObjectiveCountableI<*>
                 if (!list.contains(objective)) {
-                    reg(objective)
+                    if (it.isAnnotationPresent(com.github.zhibei.objective.Plugin::class.java)) {
+                        if (Bukkit.getPluginManager().isPluginEnabled(it.getAnnotation(com.github.zhibei.objective.Plugin::class.java).plugin)) {
+                            reg(objective)
+                        }
+                    } else {
+                        reg(objective)
+                    }
                 }
             }
         }

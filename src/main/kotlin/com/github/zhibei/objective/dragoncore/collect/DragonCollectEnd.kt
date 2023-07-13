@@ -1,12 +1,12 @@
 package com.github.zhibei.objective.dragoncore.collect
 
-import com.github.zhibei.objective.dragoncore.Loader
+import com.github.zhibei.objective.Loader
+import com.github.zhibei.objective.Plugin
 import com.ipedg.minecraft.dragoncollect.event.PlayerCollectEndEvent
-import ink.ptms.chemdah.core.quest.objective.Dependency
 import ink.ptms.chemdah.core.quest.objective.ObjectiveCountableI
 
 @Loader
-@Dependency("DragonCollect")
+@Plugin("DragonCollect")
 object DragonCollectEnd : ObjectiveCountableI<PlayerCollectEndEvent>() {
 
     override val name = "dragoncore collect end"

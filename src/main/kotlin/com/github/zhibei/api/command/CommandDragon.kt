@@ -2,6 +2,8 @@ package com.github.zhibei.api.command
 
 import eos.moe.dragoncore.api.SlotAPI
 import org.bukkit.Bukkit
+import org.bukkit.Material
+import org.bukkit.inventory.ItemStack
 import taboolib.common.platform.ProxyCommandSender
 import taboolib.common.platform.command.CommandBody
 import taboolib.common.platform.command.CommandHeader
@@ -25,7 +27,7 @@ object CommandDragon {
             dynamic("slot") {
                 execute<ProxyCommandSender> { _, context, argument ->
                     val player = Bukkit.getPlayerExact(context["player"])
-                    SlotAPI.setSlotItem(player, argument, null, true)
+                    SlotAPI.setSlotItem(player, argument, ItemStack(Material.AIR), true)
                 }
             }
         }

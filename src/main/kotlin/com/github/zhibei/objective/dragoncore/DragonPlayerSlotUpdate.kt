@@ -1,11 +1,12 @@
 package com.github.zhibei.objective.dragoncore
 
+import com.github.zhibei.objective.Loader
+import com.github.zhibei.objective.Plugin
 import eos.moe.dragoncore.api.event.PlayerSlotUpdateEvent
-import ink.ptms.chemdah.core.quest.objective.Dependency
 import ink.ptms.chemdah.core.quest.objective.ObjectiveCountableI
 
 @Loader
-@Dependency("DragonCore")
+@Plugin("DragonCore")
 object DragonPlayerSlotUpdate : ObjectiveCountableI<PlayerSlotUpdateEvent>() {
 
     override val name = "dragoncore player slot update"

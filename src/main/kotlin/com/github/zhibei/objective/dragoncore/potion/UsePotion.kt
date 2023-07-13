@@ -1,12 +1,12 @@
 package com.github.zhibei.objective.dragoncore.potion
 
-import com.github.zhibei.objective.dragoncore.Loader
+import com.github.zhibei.objective.Loader
+import com.github.zhibei.objective.Plugin
 import com.ipedg.minecraft.dragonpotions.event.UsePotionEvent
-import ink.ptms.chemdah.core.quest.objective.Dependency
 import ink.ptms.chemdah.core.quest.objective.ObjectiveCountableI
 
 @Loader
-@Dependency("DragonPotions")
+@Plugin("DragonPotions")
 object UsePotion : ObjectiveCountableI<UsePotionEvent>() {
 
     override val name = "dragoncore use potion"
