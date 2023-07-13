@@ -37,6 +37,9 @@ object Command {
     }
 
     @CommandBody
+    val dragon = CommandDragon
+
+    @CommandBody
     val mm = CommandMM
 
 }
