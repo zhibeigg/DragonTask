@@ -24,6 +24,7 @@ taboolib {
             name("MythicMobs").optional(true)
             name("DragonCollect").optional(true)
             name("Chemdah")
+            name("PlaceholderAPI")
         }
     }
 }
