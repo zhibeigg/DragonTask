@@ -23,6 +23,7 @@ taboolib {
             name("DragonPotions").optional(true)
             name("MythicMobs").optional(true)
             name("DragonCollect").optional(true)
+            name("Planners").optional(true)
             name("Chemdah")
             name("PlaceholderAPI")
         }
