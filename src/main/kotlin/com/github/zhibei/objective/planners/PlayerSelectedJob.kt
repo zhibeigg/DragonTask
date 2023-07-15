@@ -1,7 +1,8 @@
-package com.bh.planners.api.compat.chemdah
+package com.github.zhibei.objective.planners
 
 import com.bh.planners.api.event.PlayerSelectedJobEvent
-import com.bh.planners.util.isWorld
+import com.github.zhibei.objective.Loader
+import com.github.zhibei.objective.Plugin
 import ink.ptms.chemdah.core.quest.objective.ObjectiveCountableI
 @Loader
 @Plugin("Planners")
@@ -21,9 +22,6 @@ object PlayerSelectedJob : ObjectiveCountableI<PlayerSelectedJobEvent>() {
         }
         addSimpleCondition("level") { data, it ->
             data.toInt() <= it.profile.level
-        }
-        addSimpleCondition("world") { data, it ->
-            it.profile.player.world.isWorld(data.toString())
         }
     }
 }
