@@ -25,6 +25,7 @@ taboolib {
             name("DragonCollect").optional(true)
             name("Planners").optional(true)
             name("Chemdah")
+            name("DragonGPS")
             name("PlaceholderAPI")
         }
     }
