@@ -12,6 +12,6 @@ task名:
 default:
   resource: "point.gif"
   label:
-    - "-200<->&a&l{task}"
-    - "-100<->&e%distance%米"
+    - "5<->&a&l{task}"
+    - "35<->&e%distance%米"
   distance: 10000
