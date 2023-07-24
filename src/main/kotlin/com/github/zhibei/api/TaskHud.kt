@@ -98,7 +98,7 @@ object TaskHud {
                     val name = task.track()?.name ?: task.id
                     val world = location.world?.name ?: player.world.name
                     val waypointData = (waypointDatas[task.id] ?: waypointDatas["default"] ?: error("无${task.id}的导航配置, 也无默认配置")).apply {
-                        key = task.id
+                        key = id
                         x = location.x
                         y = location.y
                         z = location.z
