@@ -23,6 +23,15 @@ object DragonTask : Plugin() {
     @Config("config.yml", migrate = true, autoReload = true)
     lateinit var config: Configuration
 
+    val mention: Boolean
+        get() = config.getBoolean("mention.enable")
+
+    val mentionType: String
+        get() = config.getString("mention.type", "normal")!!
+
+    val clearDistance: Int
+        get() = config.getInt("clearDistance", 3)
+
     override fun onEnable() {
         say("&6==================")
         say("&6DragonTask!&a启动！&cby.zhi_bei")

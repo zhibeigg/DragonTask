@@ -1,0 +1,17 @@
+task名:
+  #不写resource默认为不显示图片
+  resource: "zb.gif"
+  #地标显示信息
+  label:
+    - "-140<->&l&a蠢蛋，come here"
+    - "-170<->&l%distance%米"
+    #-140 -170 100 为偏移基础位置Y轴显示(30以上才能看到明显效果)，不写则为默认位置(不写的话<->也别写)
+    - "100<->%distance%米"
+  #多少距离(米)内才显示,不写则多远都能看到
+  distance: 10000
+default:
+  resource: "point.gif"
+  label:
+    - "-200<->&a&l{task}"
+    - "-100<->&e%distance%米"
+  distance: 10000

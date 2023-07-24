@@ -11,6 +11,8 @@ taboolib {
     install("platform-bukkit")
     install("expansion-command-helper")
     install("module-configuration")
+    install("module-lang")
+    install("module-chat")
     classifier = null
     version = "6.0.11-24"
 
@@ -23,6 +25,7 @@ taboolib {
             name("DragonPotions").optional(true)
             name("MythicMobs").optional(true)
             name("DragonCollect").optional(true)
+            name("GDDTitle").optional(true)
             name("Planners").optional(true)
             name("Chemdah")
             name("DragonGPS")

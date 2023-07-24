@@ -2,6 +2,7 @@ package com.github.zhibei.api.command
 
 import com.github.zhibei.DragonTask
 import com.github.zhibei.DragonTask.config
+import com.github.zhibei.api.TaskHud
 import taboolib.common.platform.ProxyCommandSender
 import taboolib.common.platform.command.CommandBody
 import taboolib.common.platform.command.CommandHeader
@@ -22,6 +23,7 @@ object Command {
 
         execute<ProxyCommandSender> { sender, _, _ ->
             config.reload()
+            TaskHud.reload()
             sender.sendMessage("reload successful.")
         }
 
