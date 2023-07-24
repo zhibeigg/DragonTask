@@ -1,2 +1,3 @@
 world-message: "导航点位置处于 {0}，请前往后开启"
 gps-start: "&a导航已开始 &c{0}"
+gps-stop: "&c导航已停止 &c{0}"

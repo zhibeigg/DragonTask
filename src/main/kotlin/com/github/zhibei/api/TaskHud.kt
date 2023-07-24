@@ -83,6 +83,14 @@ object TaskHud {
         if (e.identifier == "dragontask") {
             val player = e.player
             val id = e.data[0]
+            if (player.getTaskBoard().wayPoints.contains(key = id)) {
+                val board = player.getTaskBoard()
+                board.wayPoints.remove(id)
+                boards[player.name] = board
+                DragonTracker.getInstance().packetHandler.sendRemoveWaypoint(player, id)
+                player.sendSpecialLang("gps-stop", id)
+                return
+            }
             val quest = player.chemdahProfile.getQuests().find { it.id == id }!!
             quest.tasks.forEach { task ->
                 if (task.isQuestDependCompleted(player) && !task.isCompleted(player.chemdahProfile)) {
@@ -162,7 +170,7 @@ object TaskHud {
         val table = mutableListOf<String>()
         val taskBoard = player.getTaskBoard()
         taskBoard.quests.forEach {
-            if (taskBoard.wayPoints.contains(it)) {
+            if (taskBoard.wayPoints.contains(key = it)) {
                 table.add("是")
             } else {
                 table.add("否")
