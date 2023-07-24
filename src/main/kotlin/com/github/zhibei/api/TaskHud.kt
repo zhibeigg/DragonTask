@@ -13,6 +13,7 @@ import ink.ptms.chemdah.api.ChemdahAPI.chemdahProfile
 import ink.ptms.chemdah.api.ChemdahAPI.isChemdahProfileLoaded
 import ink.ptms.chemdah.api.event.collect.PlayerEvents
 import ink.ptms.chemdah.core.quest.addon.AddonDepend.Companion.isQuestDependCompleted
+import ink.ptms.chemdah.core.quest.addon.AddonTrack.Companion.allowTracked
 import ink.ptms.chemdah.core.quest.addon.AddonTrack.Companion.track
 import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.Bukkit
@@ -75,7 +76,11 @@ object TaskHud {
 
     @SubscribeEvent
     fun e(e: PlayerQuitEvent) {
-        boards.remove(e.player.name)
+        val player = e.player
+        boards[player.name]?.wayPoints?.forEach {
+            DragonTracker.getInstance().packetHandler.sendRemoveWaypoint(player, it.key)
+        }
+        boards.remove(player.name)
     }
 
     @SubscribeEvent
@@ -93,9 +98,12 @@ object TaskHud {
             }
             val quest = player.chemdahProfile.getQuests().find { it.id == id }!!
             quest.tasks.forEach { task ->
-                if (task.isQuestDependCompleted(player) && !task.isCompleted(player.chemdahProfile)) {
-                    val location = task.track()?.center?.getLocation(player) ?: return
+                if (task.isQuestDependCompleted(player) && !task.isCompleted(player.chemdahProfile) && task.allowTracked()) {
                     val name = task.track()?.name ?: task.id
+                    val location = task.track()?.center?.getLocation(player) ?: run {
+                        player.sendSpecialLang("center-empty", name)
+                        return
+                    }
                     val world = location.world?.name ?: player.world.name
                     val waypointData = (waypointDatas[task.id] ?: waypointDatas["default"] ?: error("无${task.id}的导航配置, 也无默认配置")).apply {
                         key = id
@@ -124,19 +132,25 @@ object TaskHud {
     }
 
     private fun clearWayPoint(player: Player) {
+        val board = player.getTaskBoard()
         player.chemdahProfile.getQuests().forEach {  quest ->
             if (quest.isValid && !quest.isCompleted) {
                 quest.tasks.forEach task@{ task ->
-                    if (task.isQuestDependCompleted(player) && !task.isCompleted(player.chemdahProfile)) {
+                    if (task.isQuestDependCompleted(player) && !task.isCompleted(player.chemdahProfile) && task.allowTracked()) {
                         val point = player.getTaskBoard().wayPoints[quest.id] ?: return@task
                         val location = Location(Bukkit.getWorld(point.worldName), point.x, point.y, point.z)
                         if (player.location.distance(location) <= clearDistance) {
-                            DragonTracker.getInstance().packetHandler.sendRemoveWaypoint(player, task.id)
-                            val board = player.getTaskBoard()
+                            DragonTracker.getInstance().packetHandler.sendRemoveWaypoint(player, quest.id)
                             board.wayPoints.remove(quest.id)
                             boards[player.name] = board
                         }
                     }
+                }
+            } else {
+                if (board.wayPoints.contains(key = quest.id)) {
+                    DragonTracker.getInstance().packetHandler.sendRemoveWaypoint(player, quest.id)
+                    board.wayPoints.remove(quest.id)
+                    boards[player.name] = board
                 }
             }
         }
@@ -150,14 +164,16 @@ object TaskHud {
         quests.forEach {  quest ->
             val description = mutableListOf<String>()
             if (quest.isValid && !quest.isCompleted) {
-                taskBoard.quests += quest.id
                 quest.tasks.forEach task@{ task ->
-                    if (task.isQuestDependCompleted(player) && !task.isCompleted(player.chemdahProfile)) {
+                    if (task.isQuestDependCompleted(player) && !task.isCompleted(player.chemdahProfile) && task.allowTracked()) {
                         val var1 = task.track()?.description ?: return@task
                         val var2 = task.track()?.name ?: ""
                         description += var2
                         description += var1
                     }
+                }
+                if (description.isNotEmpty()) {
+                    taskBoard.quests += quest.id
                 }
             }
             taskBoard.info[quest.id] = PlaceholderAPI.setPlaceholders(player, description.joinToString("\n"))

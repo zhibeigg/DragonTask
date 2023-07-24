@@ -1,3 +1,4 @@
-world-message: "导航点位置处于 {0}，请前往后开启"
-gps-start: "&a导航已开始 &c{0}"
-gps-stop: "&c导航已停止 &c{0}"
+world-message: "&4| &f导航点世界处于 &c{0}&f 请前往后开启 &4|"
+gps-start: "&a| &f导航已开始 &c{0} &a|"
+gps-stop: "&4| &f导航已停止 &c{0} &4|"
+center-empty: "&4| &f暂无导航 &c{0} &4|"
