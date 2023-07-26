@@ -64,22 +64,20 @@ object TaskHud {
     }
 
     fun refreshQuest(player: Player) {
-        getHud(player).sendTask()
+        getHud(player)?.sendTask()
     }
 
     @SubscribeEvent
     fun e(e: PlayerEvents.Selected) {
         val taskBoard = TaskBoard(e.player)
+        DragonTracker.getInstance().packetHandler.sendClearWaypoint(e.player)
         boards[e.player.name] = taskBoard
-        refreshQuest(e.player)
     }
 
     @SubscribeEvent
     fun e(e: PlayerQuitEvent) {
         val player = e.player
-        boards[player.name]?.wayPoints?.forEach {
-            DragonTracker.getInstance().packetHandler.sendRemoveWaypoint(player, it.key)
-        }
+        DragonTracker.getInstance().packetHandler.sendClearWaypoint(player)
         boards.remove(player.name)
     }
 
@@ -88,8 +86,8 @@ object TaskHud {
         if (e.identifier == "dragontask") {
             val player = e.player
             val id = e.data[0]
-            if (player.getTaskBoard().wayPoints.contains(key = id)) {
-                val board = player.getTaskBoard()
+            val board = player.getTaskBoard() ?: return
+            if (board.wayPoints.contains(key = id)) {
                 board.wayPoints.remove(id)
                 boards[player.name] = board
                 DragonTracker.getInstance().packetHandler.sendRemoveWaypoint(player, id)
@@ -120,7 +118,6 @@ object TaskHud {
                     if (player.world.name == world) {
                         player.sendSpecialLang("gps-start", name)
                         DragonTracker.getInstance().packetHandler.sendAddWaypoint(player, waypointData)
-                        val board = player.getTaskBoard()
                         board.wayPoints[id] = waypointData
                         boards[player.name] = board
                     } else {
@@ -132,12 +129,12 @@ object TaskHud {
     }
 
     private fun clearWayPoint(player: Player) {
-        val board = player.getTaskBoard()
+        val board = player.getTaskBoard() ?: return
         player.chemdahProfile.getQuests().forEach {  quest ->
             if (quest.isValid && !quest.isCompleted) {
                 quest.tasks.forEach task@{ task ->
                     if (task.isQuestDependCompleted(player) && !task.isCompleted(player.chemdahProfile) && task.allowTracked()) {
-                        val point = player.getTaskBoard().wayPoints[quest.id] ?: return@task
+                        val point = player.getTaskBoard()!!.wayPoints[quest.id] ?: return@task
                         val location = Location(Bukkit.getWorld(point.worldName), point.x, point.y, point.z)
                         if (player.location.distance(location) <= clearDistance) {
                             DragonTracker.getInstance().packetHandler.sendRemoveWaypoint(player, quest.id)
@@ -156,9 +153,9 @@ object TaskHud {
         }
     }
 
-    private fun getHud(player: Player): TaskBoard {
+    private fun getHud(player: Player): TaskBoard? {
         val quests = player.chemdahProfile.getQuests()
-        val taskBoard = boards[player.name]!!
+        val taskBoard = player.getTaskBoard() ?: return null
         taskBoard.quests.clear()
         taskBoard.info.clear()
         quests.forEach {  quest ->
@@ -184,7 +181,7 @@ object TaskHud {
 
     fun pointTable(player: Player): Map<String, String> {
         val table = mutableListOf<String>()
-        val taskBoard = player.getTaskBoard()
+        val taskBoard = player.getTaskBoard() ?: return mapOf()
         taskBoard.quests.forEach {
             if (taskBoard.wayPoints.contains(key = it)) {
                 table.add("是")
