@@ -14,7 +14,7 @@ taboolib {
     install("module-lang")
     install("module-chat")
     classifier = null
-    version = "6.0.11-24"
+    version = "6.0.11-31"
 
     description {
         contributors {
@@ -27,6 +27,8 @@ taboolib {
             name("DragonCollect").optional(true)
             name("GDDTitle").optional(true)
             name("Planners").optional(true)
+            name("ItemGrower").optional(true)
+            name("OriginAttribute").optional(true)
             name("Chemdah")
             name("DragonGPS")
             name("PlaceholderAPI")
