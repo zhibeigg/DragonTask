@@ -13,6 +13,7 @@ taboolib {
     install("module-configuration")
     install("module-lang")
     install("module-chat")
+    install("module-database")
     classifier = null
     version = "6.0.11-31"
 

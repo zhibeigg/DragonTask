@@ -91,7 +91,7 @@ object TaskHud {
                 board.wayPoints.remove(id)
                 boards[player.name] = board
                 DragonTracker.getInstance().packetHandler.sendRemoveWaypoint(player, id)
-                player.sendSpecialLang("gps-stop", id)
+                player.sendSpecialLang("gps-stop")
                 return
             }
             val quest = player.chemdahProfile.getQuests().find { it.id == id }!!

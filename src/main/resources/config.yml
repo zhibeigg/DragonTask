@@ -5,3 +5,13 @@ mention:
   type: dragon
 
 clearDistance: 3
+
+database:
+  # LOCAL,MYSQL
+  use: MYSQL
+  sql:
+    password: 123456
+    database: cdm
+    port: 3306
+    host: 127.0.0.1
+    user: root
