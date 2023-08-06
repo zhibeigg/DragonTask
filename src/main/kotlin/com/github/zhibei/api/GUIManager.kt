@@ -12,6 +12,7 @@ import org.bukkit.entity.Player
 import org.serverct.ersha.dungeon.DungeonPlus
 import org.serverct.ersha.dungeon.common.team.type.PlayerStateType
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.common.platform.function.info
 import taboolib.common.platform.function.submitAsync
 
 object GUIManager {
@@ -36,22 +37,44 @@ object GUIManager {
     }
 
     fun sendTabPacket(player: Player) {
-        val onlines = Bukkit.getOnlinePlayers()
-        val onlineNames = onlines.joinToString(":") { it.name }
-        val onlineDisplayNames = onlines.joinToString(":") { it.displayName }
+
+        val onlines = Bukkit.getOnlinePlayers().apply { info(this) }
+
+        onlines.joinToString(":") { it.name }.apply {
+            PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_onlinenames" to this))
+        }
+
+        onlines.joinToString(":") { it.displayName }.apply {
+            PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_onlinedisplaynames" to this))
+        }
+
+
         val players = DungeonPlus.teamManager.getTeam(player)?.getPlayers(PlayerStateType.ALL) ?: return
-        val names = players.joinToString(":") { it.displayName }
-        val healths = players.joinToString(":") { it.health.toString() }
-        val maxHealth = players.joinToString(":") { (it.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value ?: 0.0).toString() }
-        val manas = players.joinToString(":") { it.plannersProfile.toCurrentMana().toString() }
-        val maxManas = players.joinToString(":") { it.plannersProfile.toMaxMana().toString() }
-        PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_names" to names))
-        PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_healths" to healths))
-        PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_maxhealth" to maxHealth))
-        PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_manas" to manas))
-        PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_maxmanas" to maxManas))
-        PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_onlinenames" to onlineNames))
-        PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_onlinedisplaynames" to onlineDisplayNames))
+
+        players.joinToString(":") { it.displayName }.apply {
+            PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_names" to this))
+        }
+
+
+        players.joinToString(":") { it.health.toString() }.apply {
+            PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_healths" to this))
+        }
+
+        players.joinToString(":") { (it.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value ?: 0.0).toString() }
+            .apply {
+                PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_maxhealth" to this))
+            }
+
+
+        players.joinToString(":") { it.plannersProfile.toCurrentMana().toString() }.apply {
+            PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_manas" to this))
+        }
+
+        players.joinToString(":") { it.plannersProfile.toMaxMana().toString() }.apply {
+            PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_maxmanas" to this))
+        }
+
+
     }
 
 }
