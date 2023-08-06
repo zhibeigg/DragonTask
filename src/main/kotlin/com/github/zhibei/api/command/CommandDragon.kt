@@ -1,14 +1,12 @@
 package com.github.zhibei.api.command
 
+import com.github.zhibei.storage.Storage
 import eos.moe.dragoncore.api.SlotAPI
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import taboolib.common.platform.ProxyCommandSender
-import taboolib.common.platform.command.CommandBody
-import taboolib.common.platform.command.CommandHeader
-import taboolib.common.platform.command.mainCommand
-import taboolib.common.platform.command.subCommand
+import taboolib.common.platform.command.*
 import taboolib.expansion.createHelper
 
 
@@ -28,6 +26,18 @@ object CommandDragon {
                 execute<ProxyCommandSender> { _, context, argument ->
                     val player = Bukkit.getPlayerExact(context["player"])
                     SlotAPI.setSlotItem(player, argument, ItemStack(Material.AIR), true)
+                }
+            }
+        }
+    }
+
+    @CommandBody
+    val set = subCommand {
+        player {
+            dynamic("width") {
+                execute<ProxyCommandSender> { _, context, argument ->
+                    val player = Bukkit.getPlayerExact(context["player"]) ?: return@execute
+                    Storage.INSTANCE.setUIWidth(player, argument.toDouble())
                 }
             }
         }

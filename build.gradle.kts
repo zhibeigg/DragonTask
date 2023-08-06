@@ -30,6 +30,7 @@ taboolib {
             name("Planners").optional(true)
             name("ItemGrower").optional(true)
             name("OriginAttribute").optional(true)
+            name("DungeonPlus").optional(true)
             name("Chemdah")
             name("DragonGPS")
             name("PlaceholderAPI")
