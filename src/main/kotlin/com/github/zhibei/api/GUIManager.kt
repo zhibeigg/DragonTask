@@ -6,15 +6,17 @@ import com.bh.planners.api.ManaCounter.toMaxMana
 import com.bh.planners.api.PlannersAPI.plannersProfile
 import com.github.zhibei.storage.Storage
 import com.github.zhibei.util.sendSpecialLang
+import eos.moe.dragoncore.api.SlotAPI
 import eos.moe.dragoncore.api.gui.event.CustomPacketEvent
 import eos.moe.dragoncore.network.PacketSender
 import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import org.serverct.ersha.dungeon.DungeonPlus
 import org.serverct.ersha.dungeon.common.team.type.PlayerStateType
 import taboolib.common.platform.event.SubscribeEvent
-import taboolib.common.platform.function.info
 import taboolib.common.platform.function.submitAsync
 
 object GUIManager {
@@ -62,13 +64,25 @@ object GUIManager {
                 "举报" -> {
                     TODO()
                 }
+                "玩家信息" -> {
+                    val target = Bukkit.getPlayerExact(e.data[1]) ?: return
+                    submitAsync {
+                        SlotAPI.setSlotItem(player, "玩家信息_藏品_1", SlotAPI.getCacheSlotItem(target, "藏品_1") ?: ItemStack(Material.AIR),true)
+                        SlotAPI.setSlotItem(player, "玩家信息_藏品_2", SlotAPI.getCacheSlotItem(target, "藏品_2") ?: ItemStack(Material.AIR),true)
+                        SlotAPI.setSlotItem(player, "玩家信息_藏品_3", SlotAPI.getCacheSlotItem(target, "藏品_3") ?: ItemStack(Material.AIR),true)
+                        SlotAPI.setSlotItem(player, "玩家信息_藏品_4", SlotAPI.getCacheSlotItem(target, "藏品_4") ?: ItemStack(Material.AIR),true)
+                        SlotAPI.setSlotItem(player, "玩家信息_藏品_5", SlotAPI.getCacheSlotItem(target, "藏品_5") ?: ItemStack(Material.AIR),true)
+                        val profile = target.plannersProfile
+                        PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_onlinepings" to "${profile.level}:${profile.job?.name ?: "猎户"}"))
+                    }
+                }
             }
         }
     }
 
     fun sendTabPacket(player: Player) {
 
-        val onlines = Bukkit.getOnlinePlayers().apply { info(this) }
+        val onlines = Bukkit.getOnlinePlayers()
         val cmis = onlines.map { cmi.playerManager.getUser(it) }
 
         onlines.joinToString(":") { it.name }.apply {
