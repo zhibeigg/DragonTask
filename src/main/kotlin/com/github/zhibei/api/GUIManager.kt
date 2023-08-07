@@ -1,9 +1,11 @@
 package com.github.zhibei.api
 
+import com.Zrips.CMI.CMI
 import com.bh.planners.api.ManaCounter.toCurrentMana
 import com.bh.planners.api.ManaCounter.toMaxMana
 import com.bh.planners.api.PlannersAPI.plannersProfile
 import com.github.zhibei.storage.Storage
+import com.github.zhibei.util.sendSpecialLang
 import eos.moe.dragoncore.api.gui.event.CustomPacketEvent
 import eos.moe.dragoncore.network.PacketSender
 import org.bukkit.Bukkit
@@ -16,6 +18,9 @@ import taboolib.common.platform.function.info
 import taboolib.common.platform.function.submitAsync
 
 object GUIManager {
+
+    val cmi
+        get() = CMI.getInstance()
 
     @SubscribeEvent
     fun packet(e: CustomPacketEvent) {
@@ -30,8 +35,29 @@ object GUIManager {
     fun tab(e: CustomPacketEvent) {
         if (e.identifier == "dragontab") {
             val player = e.player
-            submitAsync {
-                sendTabPacket(player)
+            when (e.data[0]) {
+                "打开" -> {
+                    submitAsync {
+                        sendTabPacket(player)
+                    }
+                }
+                "单挑" -> {
+                    player.performCommand("dantiao send ${e.data[1]}")
+                }
+                "组队" -> {
+                    val target = Bukkit.getPlayerExact(e.data[1]) ?: return
+                    val team = DungeonPlus.teamManager.getTeam(player) ?: run {
+                        player.sendSpecialLang("not-team")
+                        return
+                    }
+                    team.invite(player, target)
+                }
+                "私聊" -> {
+                    player.performCommand("msg e.data[1] e.data[2]")
+                }
+                "举报" -> {
+                    TODO()
+                }
             }
         }
     }
@@ -39,6 +65,7 @@ object GUIManager {
     fun sendTabPacket(player: Player) {
 
         val onlines = Bukkit.getOnlinePlayers().apply { info(this) }
+        val cmis = onlines.map { cmi.playerManager.getUser(it) }
 
         onlines.joinToString(":") { it.name }.apply {
             PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_onlinenames" to this))
@@ -48,6 +75,13 @@ object GUIManager {
             PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_onlinedisplaynames" to this))
         }
 
+        cmis.joinToString(":") { it.isAfk.toString() }.apply {
+            PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_onlineafk" to this))
+        }
+
+        onlines.joinToString(":") { cmi.reflectionManager.getPing(it).toString() }.apply {
+            PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_onlinepings" to this))
+        }
 
         val players = DungeonPlus.teamManager.getTeam(player)?.getPlayers(PlayerStateType.ALL) ?: return
 
