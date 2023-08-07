@@ -53,7 +53,11 @@ object GUIManager {
                     team.invite(player, target)
                 }
                 "私聊" -> {
-                    player.performCommand("msg e.data[1] e.data[2]")
+                    if ((Bukkit.getPlayerExact(e.data[1]) ?: return).isOnline) {
+                        player.performCommand("msg ${e.data[1]} ${e.data[2]}")
+                    }else{
+                        player.sendSpecialLang("offline", e.data[1])
+                    }
                 }
                 "举报" -> {
                     TODO()
