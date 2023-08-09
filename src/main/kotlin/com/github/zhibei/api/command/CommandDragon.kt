@@ -1,6 +1,6 @@
 package com.github.zhibei.api.command
 
-import com.github.zhibei.storage.Storage
+import com.github.zhibei.core.storage.Storage
 import eos.moe.dragoncore.api.SlotAPI
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -24,7 +24,7 @@ object CommandDragon {
             suggestion<ProxyCommandSender> { _, _ -> Bukkit.getOnlinePlayers().map { it.name } }
             dynamic("slot") {
                 execute<ProxyCommandSender> { _, context, argument ->
-                    val player = Bukkit.getPlayerExact(context["player"])
+                    val player = Bukkit.getPlayerExact(context["player"]) ?: return@execute
                     SlotAPI.setSlotItem(player, argument, ItemStack(Material.AIR), true)
                 }
             }

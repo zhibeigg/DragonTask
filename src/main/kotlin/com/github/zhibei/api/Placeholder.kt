@@ -1,6 +1,6 @@
 package com.github.zhibei.api
 
-import com.github.zhibei.storage.Storage
+import com.github.zhibei.core.storage.Storage
 import org.bukkit.entity.Player
 import taboolib.platform.compat.PlaceholderExpansion
 

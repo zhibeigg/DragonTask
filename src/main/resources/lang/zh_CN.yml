@@ -5,3 +5,10 @@ center-empty: "&4| &f暂无导航 &c{0} &4|"
 
 not-team: "&4| &f您当前不在任何队伍中 &4|"
 offline: "&4| &f玩家&b{0}&f已经离线 &4|"
+
+clear-reports: "&a| &f玩家&b{0}&f的举报信息已清理&c{1}&f封"
+add-report: "&a| &f成功添加"
+remove-report: "&a| &f成功删除"
+
+report-list-top: "&e  时间  &7|&c飞&7|&c杀&7|&c挡&7|&c骂&7|&c 举报者 "
+report-list: "&e{0}&7|{1}&7|{2}&7|{3}&7|{4}&7|{5}"

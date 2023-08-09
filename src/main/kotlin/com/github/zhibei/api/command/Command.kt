@@ -44,4 +44,7 @@ object Command {
     @CommandBody
     val mm = CommandMM
 
+    @CommandBody
+    val report = CommandReport
+
 }

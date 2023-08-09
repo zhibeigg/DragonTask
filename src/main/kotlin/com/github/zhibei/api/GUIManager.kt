@@ -4,8 +4,10 @@ import com.Zrips.CMI.CMI
 import com.bh.planners.api.ManaCounter.toCurrentMana
 import com.bh.planners.api.ManaCounter.toMaxMana
 import com.bh.planners.api.PlannersAPI.plannersProfile
-import com.github.zhibei.storage.Storage
+import com.github.zhibei.core.pojo.Report
+import com.github.zhibei.core.storage.Storage
 import com.github.zhibei.util.sendSpecialLang
+import com.valorin.api.DantiaoAPI
 import eos.moe.dragoncore.api.SlotAPI
 import eos.moe.dragoncore.api.gui.event.CustomPacketEvent
 import eos.moe.dragoncore.network.PacketSender
@@ -18,10 +20,11 @@ import org.serverct.ersha.dungeon.DungeonPlus
 import org.serverct.ersha.dungeon.common.team.type.PlayerStateType
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.submitAsync
+import java.util.*
 
 object GUIManager {
 
-    val cmi
+    val cmi: CMI
         get() = CMI.getInstance()
 
     @SubscribeEvent
@@ -52,7 +55,7 @@ object GUIManager {
                         player.sendSpecialLang("not-team")
                         return
                     }
-                    team.invite(player, target)
+                    team.invite(target, player)
                 }
                 "私聊" -> {
                     if ((Bukkit.getPlayerExact(e.data[1]) ?: return).isOnline) {
@@ -62,7 +65,10 @@ object GUIManager {
                     }
                 }
                 "举报" -> {
-                    TODO()
+                    val cheater = Bukkit.getPlayerExact(e.data[1]) ?: return
+                    val option = listOf(e.data[2].toDouble() > 0,e.data[3].toDouble() > 0,e.data[4].toDouble() > 0,e.data[5].toDouble() > 0)
+                    val report = Report(UUID.randomUUID(), player, cheater, e.data[6], option, System.currentTimeMillis())
+                    ReportManager.saveReport(report)
                 }
                 "玩家信息" -> {
                     val target = Bukkit.getPlayerExact(e.data[1]) ?: return
@@ -73,7 +79,7 @@ object GUIManager {
                         SlotAPI.setSlotItem(player, "玩家信息_藏品_4", SlotAPI.getCacheSlotItem(target, "藏品_4") ?: ItemStack(Material.AIR),true)
                         SlotAPI.setSlotItem(player, "玩家信息_藏品_5", SlotAPI.getCacheSlotItem(target, "藏品_5") ?: ItemStack(Material.AIR),true)
                         val profile = target.plannersProfile
-                        PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_onlinepings" to "${profile.level}:${profile.job?.name ?: "猎户"}"))
+                        PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_thisplayer" to "${profile.level}:${profile.job?.name ?: "猎户"}:${DantiaoAPI.getPlayerDanName(player) ?: "PVP无段位"}"))
                     }
                 }
             }
