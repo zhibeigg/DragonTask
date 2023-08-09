@@ -7,7 +7,7 @@ import com.bh.planners.api.PlannersAPI.plannersProfile
 import com.github.zhibei.core.pojo.Report
 import com.github.zhibei.core.storage.Storage
 import com.github.zhibei.util.sendSpecialLang
-import com.valorin.api.DantiaoAPI
+import com.valorin.Main
 import eos.moe.dragoncore.api.SlotAPI
 import eos.moe.dragoncore.api.gui.event.CustomPacketEvent
 import eos.moe.dragoncore.network.PacketSender
@@ -79,7 +79,14 @@ object GUIManager {
                         SlotAPI.setSlotItem(player, "玩家信息_藏品_4", SlotAPI.getCacheSlotItem(target, "藏品_4") ?: ItemStack(Material.AIR),true)
                         SlotAPI.setSlotItem(player, "玩家信息_藏品_5", SlotAPI.getCacheSlotItem(target, "藏品_5") ?: ItemStack(Material.AIR),true)
                         val profile = target.plannersProfile
-                        PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_thisplayer" to "${profile.level}:${profile.job?.name ?: "猎户"}:${DantiaoAPI.getPlayerDanName(player) ?: "PVP无段位"}"))
+                        val dh = Main.getInstance().danHandler
+                        val danDisplayName = if (dh.getPlayerDan(player.name) == null) {
+                            Main.getInstance().configManager.initialDanName
+                        } else {
+                            dh.getPlayerDan(player.name).displayName
+                        }
+                        PacketSender.sendSyncPlaceholder(player, mapOf("dragontab_thisplayer" to "${profile.level}:${profile.job?.name ?: "猎户"}:${danDisplayName!!}"))
+
                     }
                 }
             }
